@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ProjectCard from "../components/projectCard";
+import Loading from "../components/loading";
+import { Card } from "semantic-ui-react";
 
 class ProjectsContainer extends Component {
 	state = {
@@ -27,7 +29,15 @@ class ProjectsContainer extends Component {
 			<ProjectCard key={p.id} project={p} />
 		));
 
-		return <div>{userProjectsCards}</div>;
+		return (
+			<div>
+				{!this.state.fetchProjectsCompleted ? (
+					<Loading />
+				) : (
+					<Card.Group centered>{userProjectsCards}</Card.Group>
+				)}
+			</div>
+		);
 	}
 }
 

@@ -3,15 +3,14 @@ import { withRouter } from "react-router-dom";
 
 class ContractCard extends Component {
 	handleClick = () => {
-		if (
-			this.props.history.location.pathname !==
-			`/contracts/${this.props.contract.id}`
-		) {
-			this.props.history.push(`/contracts/${this.props.contract.id}`);
+		let cardUrl = `/contracts/${this.props.contract.id}`;
+		if (this.props.history.location.pathname !== cardUrl) {
+			this.props.history.push(cardUrl);
 		}
 	};
 
 	render() {
+		const schoolId = this.props.contract.relationships.school.data.id; // integrate into card somehow?
 		const attributes = this.props.contract.attributes;
 		let status;
 		switch (attributes.status) {

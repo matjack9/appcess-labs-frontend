@@ -3,7 +3,10 @@ import { withRouter } from "react-router-dom";
 
 class SchoolCard extends Component {
 	handleClick = () => {
-		// this.props.history.push(`/schools/${this.props.school.id}`);
+		let cardUrl = `/schools/${this.props.school.id}`;
+		if (this.props.history.location.pathname !== cardUrl) {
+			this.props.history.push(cardUrl);
+		}
 	};
 
 	render() {

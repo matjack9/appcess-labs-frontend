@@ -1,15 +1,29 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import * as actions from "../actions";
+import {
+	Button,
+	Form,
+	Grid,
+	Header,
+	Image,
+	Message,
+	Segment
+} from "semantic-ui-react";
 
-class Login extends React.Component {
+class Login extends Component {
 	state = {
 		error: false,
 		fields: {
 			email: "",
 			password: ""
 		}
+	};
+
+	handleSignUpClick = e => {
+		e.preventDefault();
+		this.props.history.push("/sign_up");
 	};
 
 	handleChange = e => {
@@ -30,29 +44,53 @@ class Login extends React.Component {
 		) : (
 			<div>
 				{this.state.error ? <h1>Try Again</h1> : null}
-				<div className="ui form">
-					<form onSubmit={this.handleSubmit}>
-						<div className="ui field">
-							<label>Email</label>
-							<input
-								name="email"
-								placeholder="email"
-								value={fields.email}
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div className="ui field">
-							<label>Password</label>
-							<input
-								name="password"
-								type="password"
-								placeholder="password"
-								value={fields.password}
-								onChange={this.handleChange}
-							/>
-						</div>
-						<button type="submit">Login</button>
-					</form>
+				<div className="login-form">
+					<style>{`
+			      body > div,
+			      body > div > div,
+			      body > div > div > div.login-form {
+			        height: 100%;
+			      }
+			    `}</style>
+					<Grid
+						textAlign="center"
+						style={{ height: "100%" }}
+						verticalAlign="middle"
+					>
+						<Grid.Column style={{ maxWidth: 450 }}>
+							<Header as="h2" color="black" textAlign="center">
+								Log in to your account
+							</Header>
+							<Form size="large" onSubmit={this.handleSubmit}>
+								<Segment stacked>
+									<Form.Input
+										fluid
+										icon="user"
+										iconPosition="left"
+										placeholder="E-mail address"
+										name="email"
+										onChange={this.handleChange}
+									/>
+									<Form.Input
+										fluid
+										icon="lock"
+										iconPosition="left"
+										placeholder="Password"
+										type="password"
+										name="password"
+										onChange={this.handleChange}
+									/>
+
+									<Button color="black" fluid size="large">
+										Login
+									</Button>
+								</Segment>
+							</Form>
+							<Message>
+								New to us? <Link to={"/sign_up"}>Sign Up</Link>
+							</Message>
+						</Grid.Column>
+					</Grid>
 				</div>
 			</div>
 		);

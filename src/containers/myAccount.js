@@ -3,7 +3,7 @@ import withAuth from "../hocs/withAuth";
 
 class MyAccount extends Component {
 	render() {
-		return <h4>Testing My Account</h4>;
+		return <h2>My Account</h2>;
 	}
 }
 

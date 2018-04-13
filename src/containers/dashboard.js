@@ -10,8 +10,12 @@ class Dashboard extends Component {
 
 		return (
 			<div>
-				<h3>Dashboard: Hello {currentUser.first_name}</h3>
-				<label>Here are your projects:</label>
+				<h2>Hello {currentUser.first_name},</h2>
+				<label>
+					<h3 style={{ color: "SteelBlue", "margin-bottom": "2%" }}>
+						Here are your projects:
+					</h3>
+				</label>
 				<ProjectsContainer />
 			</div>
 		);

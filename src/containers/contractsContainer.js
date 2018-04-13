@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ContractCard from "../components/contractCard";
+import Loading from "../components/loading";
 
 class ContractsContainer extends Component {
 	state = {
@@ -26,8 +27,15 @@ class ContractsContainer extends Component {
 		const userContractsCards = this.props.userContracts.map(c => (
 			<ContractCard key={c.id} contract={c} />
 		));
-
-		return <div>{userContractsCards}</div>;
+		return (
+			<div>
+				{!this.state.fetchContractsCompleted ? (
+					<Loading />
+				) : (
+					<div>{userContractsCards}</div>
+				)}
+			</div>
+		);
 	}
 }
 

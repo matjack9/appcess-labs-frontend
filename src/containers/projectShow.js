@@ -29,7 +29,11 @@ class ProjectShow extends Component {
 			<p>Nothing found</p>
 		) : (
 			<div>
-				<ProjectCard key={this.props.project.id} project={this.props.project} />
+				<ProjectCard
+					key={this.props.project.id}
+					project={this.props.project}
+					isFluid={true}
+				/>
 				<ContractsContainer projectId={this.props.project.id} />
 			</div>
 		);
