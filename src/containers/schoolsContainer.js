@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import SchoolCard from "../components/schoolCard";
+import Loading from "../components/loading";
+import { Card } from "semantic-ui-react";
 
 class SchoolsContainer extends Component {
 	state = {
@@ -9,12 +11,7 @@ class SchoolsContainer extends Component {
 	};
 
 	componentDidMount() {
-		if (localStorage.getItem("token")) {
-			//change
-			this.props.fetchSchools();
-		} else {
-			this.setState({ fetchSchoolsCompleted: true });
-		}
+		this.props.fetchSchools();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -28,7 +25,15 @@ class SchoolsContainer extends Component {
 			<SchoolCard key={s.id} school={s} />
 		));
 
-		return <div>{schoolsCards}</div>;
+		return (
+			<div>
+				{!this.state.fetchSchoolsCompleted ? (
+					<Loading />
+				) : (
+					<Card.Group centered>{schoolsCards}</Card.Group>
+				)}
+			</div>
+		);
 	}
 }
 

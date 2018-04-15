@@ -68,3 +68,35 @@ export const fetchSchools = () => dispatch => {
 		dispatch({ type: "SET_SCHOOLS", payload });
 	});
 };
+
+export const createProject = (
+	name,
+	description,
+	user_stories,
+	requirements,
+	history
+) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.projects
+		.postProject({ name, description, user_stories, requirements })
+		.then(project => {
+			if (project.data) {
+				history.push(`/projects/${project.data.id}`);
+			} else {
+				let errorMessage = project.errors;
+				alert(errorMessage);
+			}
+		});
+};
+
+export const createContract = (project_id, school_id, history) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.contracts.postContract({ project_id, school_id }).then(contract => {
+		if (contract.data) {
+			history.push(`/contracts/${contract.data.id}`);
+		} else {
+			let errorMessage = contract.errors;
+			alert(errorMessage);
+		}
+	});
+};

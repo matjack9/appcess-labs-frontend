@@ -12,6 +12,33 @@ const getWithToken = url => {
 	}).then(res => res.json());
 };
 
+const postWithToken = (url, data) => {
+	const token = localStorage.getItem("token");
+	return fetch(url, {
+		method: "POST",
+		headers: { ...headers, Authorization: token },
+		body: JSON.stringify(data)
+	}).then(res => res.json());
+};
+
+const patchWithToken = (url, data) => {
+	const token = localStorage.getItem("token");
+	return fetch(url, {
+		method: "PATCH",
+		headers: { ...headers, Authorization: token },
+		body: JSON.stringify(data)
+	}).then(res => res.json());
+};
+
+const deleteWithToken = (url, data) => {
+	const token = localStorage.getItem("token");
+	return fetch(url, {
+		method: "DELETE",
+		headers: { ...headers, Authorization: token },
+		body: JSON.stringify(data)
+	}).then(res => res.json());
+};
+
 const getCurrentUser = () => {
 	return getWithToken(`${API_ROOT}/current_user`);
 };
@@ -48,6 +75,14 @@ const getSchools = () => {
 	return getWithToken(`${API_ROOT}/schools`);
 };
 
+const postProject = projectData => {
+	return postWithToken(`${API_ROOT}/projects`, projectData);
+};
+
+const postContract = contractData => {
+	return postWithToken(`${API_ROOT}/contracts`, contractData);
+};
+
 export const adapter = {
 	auth: {
 		login,
@@ -55,11 +90,13 @@ export const adapter = {
 	},
 	projects: {
 		getUserProject,
-		getUserProjects
+		getUserProjects,
+		postProject
 	},
 	contracts: {
 		getUserContract,
-		getUserContracts
+		getUserContracts,
+		postContract
 	},
 	schools: {
 		getSchool,

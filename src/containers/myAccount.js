@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import withAuth from "../hocs/withAuth";
+import { Header, Icon } from "semantic-ui-react";
 
 class MyAccount extends Component {
 	render() {
-		return <h2>My Account</h2>;
+		return (
+			<div>
+				<Header as="h2">
+					<Icon name="settings" />My Account
+				</Header>
+			</div>
+		);
 	}
 }
 

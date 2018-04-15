@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "./actions";
 import About from "./components/about";
@@ -8,7 +8,10 @@ import SignUp from "./containers/signUp";
 import MyAccount from "./containers/myAccount";
 import Login from "./components/login";
 import ProjectShow from "./containers/projectShow";
+import NewProjectForm from "./components/newProjectForm";
+import NewContractForm from "./components/newContractForm";
 import ContractShow from "./containers/contractShow";
+import SchoolsContainer from "./containers/schoolsContainer";
 import SchoolShow from "./containers/schoolShow";
 import Loading from "./components/loading";
 import "./App.css";
@@ -47,9 +50,20 @@ class App extends Component {
 						<Route path="/sign_up" component={SignUp} />
 						<Route path="/my_account" component={MyAccount} />
 						<Route path="/login" component={Login} />
+						<Route
+							exact
+							path="/projects"
+							render={() => <Redirect to={"/"} />}
+						/>
+						<Route exact path="/projects/new" component={NewProjectForm} />
+						<Route
+							path="/projects/:id/new_request"
+							component={NewContractForm}
+						/>
 						<Route path="/projects/:id" component={ProjectShow} />
 						<Route path="/contracts/:id" component={ContractShow} />
 						<Route path="/schools/:id" component={SchoolShow} />
+						<Route path="/schools" component={SchoolsContainer} />
 					</Switch>
 				)}
 			</div>

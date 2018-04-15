@@ -4,6 +4,8 @@ import * as actions from "../actions";
 import withAuth from "../hocs/withAuth";
 import ProjectCard from "../components/projectCard";
 import ContractsContainer from "./contractsContainer";
+import NewContractCard from "../components/newContractCard";
+import { Card } from "semantic-ui-react";
 
 class ProjectShow extends Component {
 	state = {
@@ -34,6 +36,12 @@ class ProjectShow extends Component {
 					project={this.props.project}
 					isFluid={true}
 				/>
+				{this.props.currentUser.account_type === "Company" &&
+				this.props.currentUser.is_admin === true ? (
+					<Card.Group centered>
+						<NewContractCard />
+					</Card.Group>
+				) : null}
 				<ContractsContainer projectId={this.props.project.id} />
 			</div>
 		);
@@ -46,8 +54,9 @@ const mapStateToProps = (state, ownProps) => {
 	if (state.userProjects.projects.length) {
 		project = state.userProjects.projects.find(p => p.id == id);
 	}
+	const currentUser = state.auth.currentUser;
 
-	return { id, project };
+	return { id, project, currentUser };
 };
 
 export default withAuth(connect(mapStateToProps, actions)(ProjectShow));

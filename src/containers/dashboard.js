@@ -3,6 +3,8 @@ import withAuth from "../hocs/withAuth";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ProjectsContainer from "./projectsContainer";
+import NewProjectCard from "../components/newProjectCard";
+import { Card, Header } from "semantic-ui-react";
 
 class Dashboard extends Component {
 	render() {
@@ -10,12 +12,18 @@ class Dashboard extends Component {
 
 		return (
 			<div>
-				<h2>Hello {currentUser.first_name},</h2>
+				<Header as="h2">Hello {currentUser.first_name},</Header>
 				<label>
-					<h3 style={{ color: "SteelBlue", "margin-bottom": "2%" }}>
+					<Header as="h3" style={{ color: "SteelBlue", marginBottom: "2%" }}>
 						Here are your projects:
-					</h3>
+					</Header>
 				</label>
+				{currentUser.account_type === "Company" &&
+				currentUser.is_admin === true ? (
+					<Card.Group centered>
+						<NewProjectCard />
+					</Card.Group>
+				) : null}
 				<ProjectsContainer />
 			</div>
 		);

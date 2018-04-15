@@ -31,6 +31,7 @@ class ContractShow extends Component {
 				<ContractCard
 					key={this.props.contract.id}
 					contract={this.props.contract}
+					isFluid={true}
 				/>
 			</div>
 		);

@@ -29,7 +29,11 @@ class SchoolShow extends Component {
 			<p>Nothing found</p>
 		) : (
 			<div>
-				<SchoolCard key={this.props.school.id} school={this.props.school} />
+				<SchoolCard
+					key={this.props.school.id}
+					school={this.props.school}
+					isFluid={true}
+				/>
 			</div>
 		);
 	}

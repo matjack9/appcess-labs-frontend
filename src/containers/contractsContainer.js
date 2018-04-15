@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import ContractCard from "../components/contractCard";
 import Loading from "../components/loading";
+import { Card } from "semantic-ui-react";
 
 class ContractsContainer extends Component {
 	state = {
@@ -32,7 +33,7 @@ class ContractsContainer extends Component {
 				{!this.state.fetchContractsCompleted ? (
 					<Loading />
 				) : (
-					<div>{userContractsCards}</div>
+					<Card.Group centered>{userContractsCards}</Card.Group>
 				)}
 			</div>
 		);

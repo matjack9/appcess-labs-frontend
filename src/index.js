@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import App from "./App";
 import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 import registerServiceWorker from "./registerServiceWorker";
 import "./index.css";
 
@@ -14,6 +15,7 @@ ReactDOM.render(
 			<div>
 				<Navbar />
 				<App />
+				<Footer />
 			</div>
 		</Provider>
 	</Router>,

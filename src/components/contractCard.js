@@ -1,7 +1,62 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { Card } from "semantic-ui-react";
 
 class ContractCard extends Component {
+	state = {
+		isFluid: false,
+		statusInfo: {
+			status: "Requested",
+			color: "orange"
+		}
+	};
+
+	componentDidMount() {
+		if (this.props.isFluid) {
+			this.setState({ isFluid: true });
+		}
+
+		const attributes = this.props.contract.attributes;
+		switch (attributes.status) {
+			case attributes.status.is_completed:
+				this.setState({
+					statusInfo: {
+						...this.state.statusInfo,
+						status: "Complete",
+						color: "green"
+					}
+				});
+				break;
+			case attributes.status.is_in_review:
+				this.setState({
+					statusInfo: {
+						...this.state.statusInfo,
+						status: "In Review",
+						color: "teal"
+					}
+				});
+				break;
+			case attributes.status.is_in_progress:
+				this.setState({
+					statusInfo: {
+						...this.state.statusInfo,
+						status: "In Progress",
+						color: "yellow"
+					}
+				});
+				break;
+			case attributes.status.is_accepted:
+				this.setState({
+					statusInfo: {
+						...this.state.statusInfo,
+						status: "Request Accepted",
+						color: "grey"
+					}
+				});
+				break;
+		}
+	}
+
 	handleClick = () => {
 		let cardUrl = `/contracts/${this.props.contract.id}`;
 		if (this.props.history.location.pathname !== cardUrl) {
@@ -10,42 +65,36 @@ class ContractCard extends Component {
 	};
 
 	render() {
-		const schoolId = this.props.contract.relationships.school.data.id; // integrate into card somehow?
 		const attributes = this.props.contract.attributes;
-		let status;
-		switch (attributes.status) {
-			case attributes.status.is_completed:
-				status = "Complete";
-				break;
-			case attributes.status.is_in_review:
-				status = "In Review";
-				break;
-			case attributes.status.is_in_progress:
-				status = "In Progress";
-				break;
-			case attributes.status.is_accepted:
-				status = "Project Accepted";
-				break;
-			default:
-				status = "Requested";
-				break;
-		}
 
 		return (
-			<div onClick={this.handleClick}>
-				<h4>
-					Contract Card for Project{" "}
-					{this.props.contract.relationships.project.data.id}
-				</h4>
-				<label>Status:</label>
-				<div>{status}</div>
-				<label>Fee:</label>
-				<div>${attributes.fee}</div>
-				<label>Started:</label>
-				<div>{attributes.start_time}</div>
-				<label>Deadline:</label>
-				<div>{attributes.deadline}</div>
-			</div>
+			<Card
+				color={this.state.statusInfo.color}
+				onClick={this.handleClick}
+				fluid={this.state.isFluid}
+			>
+				<Card.Content>
+					<Card.Header>{attributes.school.name} Contract</Card.Header>
+					<Card.Meta>
+						<span style={{ color: `${this.state.statusInfo.color}` }}>
+							<strong>{this.state.statusInfo.status}</strong>
+						</span>
+					</Card.Meta>
+					<Card.Description>
+						<label>
+							<strong>Deadline:</strong>
+						</label>
+						<div>{attributes.deadline}</div>
+						<label>
+							<strong>Started:</strong>
+						</label>
+						<div>{attributes.start_time}</div>
+					</Card.Description>
+				</Card.Content>
+				<Card.Content extra>
+					<div>Fee: ${parseInt(attributes.fee).toFixed(2)}</div>
+				</Card.Content>
+			</Card>
 		);
 	}
 }
