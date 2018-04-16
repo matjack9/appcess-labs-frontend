@@ -42,7 +42,9 @@ class ProjectShow extends Component {
 						<NewContractCard />
 					</Card.Group>
 				) : null}
-				<ContractsContainer projectId={this.props.project.id} />
+				{this.props.currentUser.account_type === "Company" ? (
+					<ContractsContainer projectId={this.props.project.id} />
+				) : null}
 			</div>
 		);
 	}

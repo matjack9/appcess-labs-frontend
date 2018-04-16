@@ -83,6 +83,17 @@ const postContract = contractData => {
 	return postWithToken(`${API_ROOT}/contracts`, contractData);
 };
 
+const patchContract = contractData => {
+	return patchWithToken(
+		`${API_ROOT}/contracts/${contractData.id}`,
+		contractData.phaseParams
+	);
+};
+
+const getUsers = () => {
+	return getWithToken(`${API_ROOT}/users`);
+};
+
 export const adapter = {
 	auth: {
 		login,
@@ -96,10 +107,14 @@ export const adapter = {
 	contracts: {
 		getUserContract,
 		getUserContracts,
-		postContract
+		postContract,
+		patchContract
 	},
 	schools: {
 		getSchool,
 		getSchools
+	},
+	users: {
+		getUsers
 	}
 };

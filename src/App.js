@@ -11,6 +11,7 @@ import ProjectShow from "./containers/projectShow";
 import NewProjectForm from "./components/newProjectForm";
 import NewContractForm from "./components/newContractForm";
 import ContractShow from "./containers/contractShow";
+import UpdateContractForm from "./components/updateContractForm";
 import SchoolsContainer from "./containers/schoolsContainer";
 import SchoolShow from "./containers/schoolShow";
 import Loading from "./components/loading";
@@ -61,6 +62,10 @@ class App extends Component {
 							component={NewContractForm}
 						/>
 						<Route path="/projects/:id" component={ProjectShow} />
+						<Route
+							path="/contracts/:id/update"
+							component={UpdateContractForm}
+						/>
 						<Route path="/contracts/:id" component={ContractShow} />
 						<Route path="/schools/:id" component={SchoolShow} />
 						<Route path="/schools" component={SchoolsContainer} />

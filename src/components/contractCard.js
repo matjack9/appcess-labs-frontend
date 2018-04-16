@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Card } from "semantic-ui-react";
+import { Card, Button } from "semantic-ui-react";
 
 class ContractCard extends Component {
 	state = {
@@ -17,7 +18,7 @@ class ContractCard extends Component {
 		}
 
 		const attributes = this.props.contract.attributes;
-		switch (attributes.status) {
+		switch (true) {
 			case attributes.status.is_completed:
 				this.setState({
 					statusInfo: {
@@ -57,10 +58,14 @@ class ContractCard extends Component {
 		}
 	}
 
-	handleClick = () => {
+	handleClick = e => {
 		let cardUrl = `/contracts/${this.props.contract.id}`;
-		if (this.props.history.location.pathname !== cardUrl) {
-			this.props.history.push(cardUrl);
+		if (e.target.classList.contains("button")) {
+			this.props.history.push(`/contracts/${this.props.contract.id}/update`);
+		} else {
+			if (this.props.history.location.pathname !== cardUrl) {
+				this.props.history.push(cardUrl);
+			}
 		}
 	};
 
@@ -74,12 +79,30 @@ class ContractCard extends Component {
 				fluid={this.state.isFluid}
 			>
 				<Card.Content>
-					<Card.Header>{attributes.school.name} Contract</Card.Header>
-					<Card.Meta>
-						<span style={{ color: `${this.state.statusInfo.color}` }}>
-							<strong>{this.state.statusInfo.status}</strong>
-						</span>
-					</Card.Meta>
+					{this.props.currentUser.account_type === "Company" ? (
+						<Card.Header>{attributes.school.name} Contract</Card.Header>
+					) : (
+						<Card.Header>{attributes.project.name} Project</Card.Header>
+					)}
+					{this.props.currentUser.account_type === "Company" ? (
+						<Card.Meta>
+							<div>
+								<strong>{attributes.project.name} Project</strong>
+							</div>
+							<span style={{ color: `${this.state.statusInfo.color}` }}>
+								<strong>{this.state.statusInfo.status}</strong>
+							</span>
+						</Card.Meta>
+					) : (
+						<Card.Meta>
+							<div>
+								<strong>{attributes.school.name} Contract</strong>
+							</div>
+							<span style={{ color: `${this.state.statusInfo.color}` }}>
+								<strong>{this.state.statusInfo.status}</strong>
+							</span>
+						</Card.Meta>
+					)}
 					<Card.Description>
 						<label>
 							<strong>Deadline:</strong>
@@ -92,11 +115,29 @@ class ContractCard extends Component {
 					</Card.Description>
 				</Card.Content>
 				<Card.Content extra>
-					<div>Fee: ${parseInt(attributes.fee).toFixed(2)}</div>
+					<div>
+						Fee: ${parseInt(attributes.fee).toFixed(2)}
+						{this.props.currentUser.account_type === "School" &&
+						this.state.isFluid ? (
+							<div>
+								<Button
+									color="blue"
+									onClick={this.handleClick}
+									style={{ marginTop: ".5em" }}
+								>
+									Update Project
+								</Button>
+							</div>
+						) : null}
+					</div>
 				</Card.Content>
 			</Card>
 		);
 	}
 }
 
-export default withRouter(ContractCard);
+const mapStateToProps = state => ({
+	currentUser: state.auth.currentUser
+});
+
+export default withRouter(connect(mapStateToProps)(ContractCard));

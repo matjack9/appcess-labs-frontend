@@ -8,7 +8,7 @@
 	/* background-size: cover; */
 }
 
-.about-text {
+.about-headline {
 	color: white;
 	vertical-align: middle;
 	font-family: "Asap", sans-serif;
@@ -17,4 +17,15 @@
 	word-spacing: 10px;
 	text-shadow: 2px 1px black;
 	padding-top: 225px;
+}
+
+.about-text {
+	color: white;
+	vertical-align: middle;
+	font-family: "Asap", sans-serif;
+	font-size: 1.5em;
+	letter-spacing: 1.5px;
+	word-spacing: 5px;
+	text-shadow: 1px 0.5px black;
+	margin-top: 100px;
 }

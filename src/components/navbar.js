@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import { Menu, Segment } from "semantic-ui-react";
 
-// style={{ left: 0, width: "100%", position: "absolute" }}
 class Navbar extends Component {
 	render() {
 		return (
@@ -27,7 +26,7 @@ class Navbar extends Component {
 							exact
 							onClick={e => {
 								e.preventDefault();
-								this.props.logoutUser();
+								this.props.logoutUser(this.props.history);
 							}}
 						/>
 					) : (
@@ -43,4 +42,4 @@ const mapStateToProps = state => ({
 	loggedIn: !!state.auth.currentUser.id
 });
 
-export default connect(mapStateToProps, actions)(Navbar);
+export default withRouter(connect(mapStateToProps, actions)(Navbar));

@@ -1,5 +1,3 @@
-// import React from "react";
-
 const initialState = { currentUser: {} };
 
 const authReducer = (state = initialState, action) => {
@@ -27,7 +25,7 @@ const authReducer = (state = initialState, action) => {
 				}
 			};
 		case "LOGOUT_USER":
-			return { ...state, currentUser: {} };
+			return initialState;
 		default:
 			return { ...state };
 	}

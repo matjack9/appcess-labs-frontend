@@ -1,18 +1,18 @@
-const initialState = { schools: [] };
+const initialState = { users: [] };
 
-const schoolReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case "SET_SCHOOLS":
-			let newSchools = [...state.schools];
+		case "SET_USERS":
+			let newUsers = [...state.users];
 			if (action.payload.data && action.payload.data.length) {
-				newSchools = filterById([...newSchools, ...action.payload.data]);
+				newUsers = filterById([...newUsers, ...action.payload.data]);
 			} else if (action.payload.data) {
-				newSchools = filterById([...newSchools, action.payload.data]);
+				newUsers = filterById([...newUsers, action.payload.data]);
 			}
 
 			return {
 				...state,
-				schools: newSchools
+				users: newUsers
 			};
 		case "LOGOUT_USER":
 			return initialState;
@@ -28,4 +28,4 @@ function filterById(arr) {
 	});
 }
 
-export default schoolReducer;
+export default userReducer;

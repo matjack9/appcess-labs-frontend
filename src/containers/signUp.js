@@ -1,121 +1,25 @@
-// import React, { Component } from "react";
-// import { connect } from "react-redux";
-//
-// class SignUp extends Component {
-// 	render() {
-// 		return this.props.loggedIn ? (
-// 			<h4>You are already signed up!</h4>
-// 		) : (
-// 			<h4>Testing SignUp</h4>
-// 		);
-// 	}
-// }
-//
-// const mapStateToProps = state => ({
-// 	loggedIn: !!state.auth.currentUser.id
-// });
-//
-// export default connect(mapStateToProps)(SignUp);
-//
-// ////////////////////////////
-// (:email, :first_name, :last_name, :password, :account_type, :account_id, :is_admin)
-//
-// import React from "react";
-// import { connect } from "react-redux";
-// import { withRouter } from "react-router-dom";
-// import * as actions from "../actions";
-//
-// class SignUp extends React.Component {
-// 	state = {
-// 		error: false,
-// 		fields: {
-// 			account_type: ,
-// 			account_id: ,
-// 			email: "",
-// 			password: "",
-// 			passwordConfirmation: "",
-// 			first_name: "",
-// 			last_name: "",
-// 			is_admin: false
-// 		}
-// 	};
-//
-// 	handleChange = e => {
-// 		const newFields = { ...this.state.fields, [e.target.name]: e.target.value };
-// 		this.setState({ fields: newFields });
-// 	};
-//
-// 	handleSubmit = e => {
-// 		e.preventDefault();
-// 		const { fields: { email, password } } = this.state;
-//
-//
-// 		this.props.loginUser(email, password, this.props.history);
-// 	};
-//
-// 	render() {
-// 		const { fields } = this.state;
-// 		return this.props.loggedIn ? (
-// 			<h4>You are already logged in!</h4>
-// 		) : (
-// 			<div>
-// 				{this.state.error ? <h1>Try Again</h1> : null}
-// 				<div className="ui form">
-// 					<form onSubmit={this.handleSubmit}>
-// 						<div className="ui field">
-// 							<label>Email</label>
-// 							<input
-// 								name="email"
-// 								placeholder="email"
-// 								value={fields.email}
-// 								onChange={this.handleChange}
-// 							/>
-// 						</div>
-// 						<div className="ui field">
-// 							<label>Password</label>
-// 							<input
-// 								name="password"
-// 								type="password"
-// 								placeholder="password"
-// 								value={fields.password}
-// 								onChange={this.handleChange}
-// 							/>
-// 						</div>
-// 						<div className="ui field">
-// 							<label>Password</label>
-// 							<input
-// 								name="passwordConfirmation"
-// 								type="password"
-// 								placeholder="confirm password"
-// 								value={fields.password}
-// 								onChange={this.handleChange}
-// 							/>
-// 						</div>
-// 						<button type="submit">Login</button>
-// 					</form>
-// 				</div>
-// 			</div>
-// 		);
-// 	}
-// }
-//
-// const mapStateToProps = state => ({
-// 	loggedIn: !!state.auth.currentUser.id
-// });
-//
-// export default withRouter(connect(mapStateToProps, actions)(SignUp));
-
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import * as actions from "../actions";
+import {
+	Button,
+	Form,
+	Radio,
+	Checkbox,
+	Grid,
+	Header,
+	Message,
+	Input,
+	Segment
+} from "semantic-ui-react";
 
-class SignUp extends React.Component {
+class SignUp extends Component {
 	state = {
 		error: false,
 		fields: {
 			account_type: "",
-			account_id: 0,
+			account_id: null,
 			email: "",
 			password: "",
 			passwordConfirmation: "",
@@ -125,11 +29,9 @@ class SignUp extends React.Component {
 		}
 	};
 
-	handleChange = e => {
-		const target = e.target;
-		const value = target.type === "checkbox" ? target.checked : target.value;
-		const name = target.name;
-		const newFields = { ...this.state.fields, [name]: value };
+	handleChange = (e, { name, value, checked }) => {
+		const newValue = value ? value : checked;
+		const newFields = { ...this.state.fields, [name]: newValue };
 
 		this.setState({
 			fields: newFields
@@ -138,100 +40,135 @@ class SignUp extends React.Component {
 
 	handleSubmit = e => {
 		e.preventDefault();
-		console.log(this.state);
+		if (this.state.fields.password === this.state.fields.passwordConfirmation) {
+			console.log(this.state.fields);
+		} else {
+			alert("Passwords need to match");
+		}
 	};
 
 	render() {
-		return (
+		const { fields } = this.state;
+		return this.props.loggedIn ? (
+			<h4>You are already signed up!</h4>
+		) : (
 			<div>
-				{this.state.error ? <h4>Try Again</h4> : null}
-				<div>
-					<form onSubmit={this.handleSubmit}>
-						<div>
-							<label>Account Type</label>
-							<input
-								type="radio"
-								id="accountChoice1"
-								name="account_type"
-								value="Company"
-								onChange={this.handleChange}
-							/>
-							<label htmlFor="accountChoice1">Company</label>
-							<input
-								type="radio"
-								id="accountChoice2"
-								name="account_type"
-								value="School"
-								onChange={this.handleChange}
-							/>
-							<label htmlFor="accountChoice2">School</label>
-						</div>
-
-						{this.state.fields.account_type ? (
-							<div>{this.state.fields.account_type}</div>
-						) : null}
-
-						<div>
-							<label>Email</label>
-							<input
-								name="email"
-								placeholder="email"
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div>
-							<label>Password</label>
-							<input
-								name="password"
-								type="password"
-								placeholder="password"
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div>
-							<label>Confirm Password</label>
-							<input
-								name="passwordConfirmation"
-								type="password"
-								placeholder="confirm password"
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div>
-							<label>First Name</label>
-							<input
-								name="first_name"
-								placeholder="first name"
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div>
-							<label>Last Name</label>
-							<input
-								name="last_name"
-								placeholder="last name"
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div>
-							<label>Admin?</label>
-							<input
-								name="is_admin"
-								type="checkbox"
-								checked={this.state.fields.is_admin}
-								onChange={this.handleChange}
-							/>
-						</div>
-						<button type="submit">Sign Up</button>
-					</form>
+				{this.state.error ? <h1>Try Again</h1> : null}
+				<div className="signup-form">
+					<style>{`
+			      body > div,
+			      body > div > div,
+			      body > div > div > div.signup-form {
+			        height: 100%;
+			      }
+			    `}</style>
+					<Grid
+						textAlign="center"
+						style={{ height: "100%" }}
+						verticalAlign="middle"
+					>
+						<Grid.Column style={{ maxWidth: 450 }}>
+							<Header as="h2" color="black" textAlign="center">
+								Sign up with Appcess Labs
+							</Header>
+							<Form size="large" onSubmit={this.handleSubmit}>
+								<Segment stacked>
+									<Form.Field>
+										Account type: <b>{this.state.fields.account_type}</b>
+									</Form.Field>
+									<Form.Field>
+										<Grid columns="equal">
+											<Grid.Row>
+												<Grid.Column>
+													<Form.Field>
+														<Radio
+															label="Contractor"
+															name="account_type"
+															value="Company"
+															checked={
+																this.state.fields.account_type === "Company"
+															}
+															onChange={this.handleChange}
+														/>
+													</Form.Field>
+												</Grid.Column>
+												<Grid.Column>
+													<Form.Field>
+														<Radio
+															label="School"
+															name="account_type"
+															value="School"
+															checked={
+																this.state.fields.account_type === "School"
+															}
+															onChange={this.handleChange}
+														/>
+													</Form.Field>
+												</Grid.Column>
+											</Grid.Row>
+										</Grid>
+									</Form.Field>
+									<Form.Input
+										fluid
+										icon="user"
+										iconPosition="left"
+										placeholder="E-mail address"
+										name="email"
+										onChange={this.handleChange}
+									/>
+									<Form.Input
+										fluid
+										icon="lock"
+										iconPosition="left"
+										placeholder="Password"
+										type="password"
+										name="password"
+										onChange={this.handleChange}
+									/>
+									<Form.Input
+										fluid
+										icon="lock"
+										iconPosition="left"
+										placeholder="Password confirmation"
+										type="Password"
+										name="passwordConfirmation"
+										onChange={this.handleChange}
+									/>
+									<Form.Input
+										fluid
+										placeholder="First name"
+										name="first_name"
+										onChange={this.handleChange}
+									/>
+									<Form.Input
+										fluid
+										placeholder="Last name"
+										name="last_name"
+										onChange={this.handleChange}
+									/>
+									<Form.Field>
+										<Checkbox
+											label="Admin?"
+											name="is_admin"
+											checked={this.state.fields.is_admin}
+											onChange={this.handleChange}
+										/>
+									</Form.Field>
+									<Button color="black" fluid size="large">
+										Sign Up
+									</Button>
+								</Segment>
+							</Form>
+						</Grid.Column>
+					</Grid>
 				</div>
 			</div>
 		);
 	}
 }
 
-// const mapStateToProps = state => ({
-//
-// });
+const mapStateToProps = state => ({
+	loggedIn: !!state.auth.currentUser.id
+});
 
-export default withRouter(connect(null, actions)(SignUp));
+export default withRouter(connect(mapStateToProps, actions)(SignUp));

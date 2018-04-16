@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import withAuth from "../hocs/withAuth";
 import ContractCard from "../components/contractCard";
+import ProjectCard from "../components/projectCard";
 
 class ContractShow extends Component {
 	state = {
@@ -10,11 +11,7 @@ class ContractShow extends Component {
 	};
 
 	componentDidMount() {
-		if (!Object.keys(this.props.contract).length) {
-			this.props.fetchUserContract(parseInt(this.props.id));
-		} else {
-			this.setState({ fetchContractCompleted: true });
-		}
+		this.props.fetchUserContractAndProject(parseInt(this.props.id));
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -33,6 +30,14 @@ class ContractShow extends Component {
 					contract={this.props.contract}
 					isFluid={true}
 				/>
+				{this.props.currentUser.account_type === "School" &&
+				Object.keys(this.props.project).length ? (
+					<ProjectCard
+						key={this.props.contract.relationships.project.data.id}
+						project={this.props.project}
+						isFluid={true}
+					/>
+				) : null}
 			</div>
 		);
 	}
@@ -40,12 +45,19 @@ class ContractShow extends Component {
 
 const mapStateToProps = (state, ownProps) => {
 	const id = ownProps.match.params.id;
+	const currentUser = state.auth.currentUser;
 	let contract = {};
 	if (state.userContracts.contracts.length) {
-		contract = state.userContracts.contracts.find(p => p.id == id);
+		contract = state.userContracts.contracts.find(c => c.id == id);
+	}
+	let project = {};
+	if (state.userProjects.projects.length && Object.keys(contract).length) {
+		project = state.userProjects.projects.find(
+			p => p.id == contract.relationships.project.data.id
+		);
 	}
 
-	return { id, contract };
+	return { id, contract, currentUser, project };
 };
 
 export default withAuth(connect(mapStateToProps, actions)(ContractShow));

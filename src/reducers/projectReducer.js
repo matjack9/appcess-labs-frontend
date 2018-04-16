@@ -14,6 +14,8 @@ const projectReducer = (state = initialState, action) => {
 				...state,
 				projects: newProjects
 			};
+		case "LOGOUT_USER":
+			return initialState;
 		default:
 			return { ...state };
 	}

@@ -4,7 +4,10 @@ import "./about.css";
 const About = props => {
 	return (
 		<div className="about-container">
-			<div className="about-text">Welcome to Appcess Labs</div>
+			<div className="about-headline">Welcome to Appcess Labs</div>
+			<div className="about-text">
+				Affordable web development projects and busy bootcamp students.
+			</div>
 		</div>
 	);
 };

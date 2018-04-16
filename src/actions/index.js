@@ -22,8 +22,9 @@ export const loginUser = (email, password, history) => dispatch => {
 	});
 };
 
-export const logoutUser = () => {
+export const logoutUser = history => {
 	localStorage.removeItem("token");
+	history.push("/");
 	return { type: "LOGOUT_USER" };
 };
 
@@ -69,6 +70,13 @@ export const fetchSchools = () => dispatch => {
 	});
 };
 
+export const fetchUsers = () => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.users.getUsers().then(payload => {
+		dispatch({ type: "SET_USERS", payload });
+	});
+};
+
 export const createProject = (
 	name,
 	description,
@@ -98,5 +106,29 @@ export const createContract = (project_id, school_id, history) => dispatch => {
 			let errorMessage = contract.errors;
 			alert(errorMessage);
 		}
+	});
+};
+
+export const updateContract = (updateParams, history) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.contracts.patchContract(updateParams).then(contract => {
+		if (contract.data) {
+			history.push(`/contracts/${contract.data.id}`);
+		} else {
+			let errorMessage = contract.errors;
+			alert(errorMessage);
+		}
+	});
+};
+
+export const fetchUserContractAndProject = id => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.contracts.getUserContract(id).then(payload => {
+		dispatch({ type: "SET_CONTRACTS", payload });
+		adapter.projects
+			.getUserProject(payload.data.relationships.project.data.id)
+			.then(payload => {
+				dispatch({ type: "SET_PROJECTS", payload });
+			});
 	});
 };
