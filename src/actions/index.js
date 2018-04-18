@@ -121,6 +121,10 @@ export const updateContract = (updateParams, history) => dispatch => {
 	});
 };
 
+export const clearContracts = () => {
+	return { type: "CLEAR_CONTRACTS" };
+};
+
 export const fetchUserContractAndProject = id => dispatch => {
 	dispatch({ type: "ASYNC_START" });
 	adapter.contracts.getUserContract(id).then(payload => {
@@ -183,4 +187,27 @@ export const createGroupAndUser = (
 			});
 		}
 	});
+};
+
+export const deleteContract = (
+	contract_id,
+	history,
+	project_id
+) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.contracts
+		.destroyContract(contract_id)
+		.then(payload => {
+			if (payload.errors) {
+				alert(payload.errors);
+			} else {
+				dispatch({ type: "CLEAR_CONTRACTS", payload });
+			}
+			return payload;
+		})
+		.then(payload => {
+			if (!payload.errors) {
+				history.push(`/projects/${project_id}`);
+			}
+		});
 };

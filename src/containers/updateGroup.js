@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
 import * as actions from "../actions";
 import withAuth from "../hocs/withAuth";
 import {
@@ -16,7 +15,7 @@ import {
 	Icon
 } from "semantic-ui-react";
 
-class MyAccount extends Component {
+class UpdateGroup extends Component {
 	state = {
 		justUpdated: false,
 		accountType: "",
@@ -36,8 +35,10 @@ class MyAccount extends Component {
 			first_name,
 			last_name,
 			account_type,
+			account_id,
 			is_admin
 		} = this.props.currentUser;
+		this.props.fetchGroup(account_type, account_id);
 		this.setState({
 			accountType: account_type,
 			isAdmin: is_admin,
@@ -50,6 +51,10 @@ class MyAccount extends Component {
 	// 	return {}
 	// }
 
+	// componentWillUnmount() {
+	//
+	// }
+
 	handleChange = (e, { name, value }) => {
 		console.dir(e.target);
 		if (name === "passwordConfirmation") {
@@ -60,15 +65,11 @@ class MyAccount extends Component {
 		}
 	};
 
-	handleClick = () => {
-		this.props.history.push("/my_account/group");
-	};
-
 	handleSubmit = e => {
 		e.preventDefault();
 		if (this.state.passwordConfirmation === this.state.userParams.password) {
 			console.log("Submitting:", this.state);
-			this.setState({ justUpdated: true }); // submission will re-set current_user (so field values automatically update) (also move this to receiving newpropsmethod)
+			this.setState({ justUpdated: true }); // also clear all controlled fields upon success
 		} else {
 			alert("New passwords need to match");
 		}
@@ -145,35 +146,9 @@ class MyAccount extends Component {
 										value={this.state.userParams.last_name}
 										onChange={this.handleChange}
 									/>
-									<Form.Field>
-										<Button color="red" fluid size="large" inverted>
-											Update Account
-										</Button>
-									</Form.Field>
-
-									{this.state.accountType === "School" && this.state.isAdmin ? (
-										<Form.Field>
-											<Button
-												color="black"
-												size="tiny"
-												onClick={this.handleClick}
-											>
-												Update School?
-											</Button>
-										</Form.Field>
-									) : null}
-									{this.state.accountType === "Company" &&
-									this.state.isAdmin ? (
-										<Form.Field>
-											<Button
-												color="black"
-												size="tiny"
-												onClick={this.handleClick}
-											>
-												Update Company?
-											</Button>
-										</Form.Field>
-									) : null}
+									<Button color="blue" fluid size="large" inverted>
+										Update Account
+									</Button>
 								</Segment>
 							</Segment>
 						</Form>
@@ -184,8 +159,34 @@ class MyAccount extends Component {
 	}
 }
 
-const mapStateToProps = state => ({ currentUser: state.auth.currentUser });
+const mapStateToProps = state => {
+	// state.auth.currentUser.account_type & .account_id
+	return {
+		currentUser: state.auth.currentUser
+	};
+};
 
-export default withAuth(
-	withRouter(connect(mapStateToProps, actions)(MyAccount))
-);
+export default withAuth(connect(mapStateToProps, actions)(UpdateGroup));
+//
+// {this.state.accountType === "School" && this.state.isAdmin ? (
+//   <div className="my-school-form">
+//     <style>{`
+//       body > div,
+//       body > div > div,
+//       body > div > div > div.my-school-form {
+//         height: 100%;
+//       }
+//     `}</style>
+//     <Grid
+//       textAlign="center"
+//       style={{ height: "100%" }}
+//       verticalAlign="middle">
+//       <Grid.Column style={{ maxWidth: 600 }}>
+//
+//       </Grid.Column>
+//     </Grid>
+//   </div>
+// ) : null}
+// {this.state.accountType === "Company"  && this.state.isAdmin ? (
+//
+// ) : null}

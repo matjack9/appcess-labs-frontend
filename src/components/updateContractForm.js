@@ -11,7 +11,8 @@ class UpdateContractForm extends Component {
 		selectedPhase: null,
 		currentPhase: "Requested",
 		color: "orange",
-		assignedStudentId: this.props.assignedStudentId
+		assignedStudentId: this.props.assignedStudentId, //fix
+		github: ""
 	};
 
 	componentDidMount() {
@@ -41,11 +42,23 @@ class UpdateContractForm extends Component {
 					break;
 			}
 		}
+		if (attributes && attributes.github) {
+			this.setState({ github: attributes.github });
+		}
+	}
+
+	componentWillUnmount() {
+		this.props.clearContracts();
 	}
 
 	handleChange = (e, { value }) => {
 		const selectedPhase = value;
 		this.setState({ selectedPhase });
+	};
+
+	handleGithubChange = (e, { value }) => {
+		const github = value;
+		this.setState({ github });
 	};
 
 	handleStudentChange = (e, { value }) => {
@@ -64,6 +77,7 @@ class UpdateContractForm extends Component {
 		updateParams["id"] = this.props.id;
 		let phaseParams = setProgress(this.state.selectedPhase);
 		phaseParams["user_id"] = this.state.assignedStudentId;
+		phaseParams["github"] = this.state.github;
 		updateParams["phaseParams"] = phaseParams;
 		this.props.updateContract(updateParams, this.props.history);
 	};
@@ -120,7 +134,12 @@ class UpdateContractForm extends Component {
 								<Form size="large" onSubmit={this.handleSubmit}>
 									<Segment>
 										<Form.Field>
-											<div style={{ color: this.state.color }}>
+											<div
+												style={{
+													color: this.state.color,
+													textShadow: "1px 0.5px black"
+												}}
+											>
 												<strong>
 													Current Phase: {this.state.currentPhase}
 												</strong>
@@ -159,24 +178,25 @@ class UpdateContractForm extends Component {
 												) : null}
 											</Form.Field>
 										) : null}
+										{this.props.currentUser.account_type === "School" &&
+										!this.props.currentUser.is_admin ? (
+											<Form.Field>
+												<label style={{ textAlign: "left" }}>
+													<strong>Update Github link?</strong>
+												</label>
+												<Form.Input
+													onChange={this.handleGithubChange}
+													fluid
+													placeholder="example: 'github.com/myName/myRepo'"
+													value={this.state.github}
+													name="github"
+												/>
+											</Form.Field>
+										) : null}
 										<Button color="blue" fluid size="large">
 											Update
 										</Button>
 									</Segment>
-									{this.props.currentUser.account_type === "Company" &&
-									this.props.currentUser.is_admin ? (
-										<Segment>
-											<Button
-												onClick={this.handleDelete}
-												color="red"
-												inverted
-												fluid
-												size="small"
-											>
-												Cancel Contract
-											</Button>
-										</Segment>
-									) : null}
 								</Form>
 							</Grid.Column>
 						</Grid>
@@ -245,13 +265,15 @@ const mapStateToProps = (state, ownProps) => {
 	const currentUser = state.auth.currentUser;
 	let studentOptions = [];
 	if (state.users.users.length) {
-		studentOptions = state.users.users.map(u => ({
+		let students = state.users.users.filter(
+			s => s.attributes.account_type === "School"
+		);
+		studentOptions = students.map(u => ({
 			key: parseInt(u.id),
 			value: parseInt(u.id),
 			text: u.attributes.first_name + " " + u.attributes.last_name
 		}));
 	}
-
 	return { id, contract, currentUser, assignedStudentId, studentOptions };
 };
 

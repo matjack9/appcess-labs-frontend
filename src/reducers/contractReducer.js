@@ -14,6 +14,8 @@ const contractReducer = (state = initialState, action) => {
 				...state,
 				contracts: newContracts
 			};
+		case "CLEAR_CONTRACTS":
+			return initialState;
 		case "LOGOUT_USER":
 			return initialState;
 		default:

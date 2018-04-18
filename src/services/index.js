@@ -30,12 +30,11 @@ const patchWithToken = (url, data) => {
 	}).then(res => res.json());
 };
 
-const deleteWithToken = (url, data) => {
+const deleteWithToken = url => {
 	const token = localStorage.getItem("token");
 	return fetch(url, {
 		method: "DELETE",
-		headers: { ...headers, Authorization: token },
-		body: JSON.stringify(data)
+		headers: { ...headers, Authorization: token }
 	}).then(res => res.json());
 };
 
@@ -90,6 +89,10 @@ const patchContract = contractData => {
 	);
 };
 
+const destroyContract = contractId => {
+	return deleteWithToken(`${API_ROOT}/contracts/${contractId}`);
+};
+
 const getUsers = () => {
 	return getWithToken(`${API_ROOT}/users`);
 };
@@ -142,7 +145,8 @@ export const adapter = {
 		getUserContract,
 		getUserContracts,
 		postContract,
-		patchContract
+		patchContract,
+		destroyContract
 	},
 	schools: {
 		getSchool,

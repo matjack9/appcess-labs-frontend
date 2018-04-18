@@ -5,6 +5,7 @@ import * as actions from "./actions";
 import About from "./components/about";
 import Dashboard from "./containers/dashboard";
 import SignUp from "./containers/signUp";
+import UpdateGroup from "./containers/updateGroup";
 import MyAccount from "./containers/myAccount";
 import Login from "./components/login";
 import ProjectShow from "./containers/projectShow";
@@ -49,6 +50,7 @@ class App extends Component {
 							<Route exact path="/" component={About} />
 						)}
 						<Route path="/sign_up" component={SignUp} />
+						<Route path="/my_account/group" component={UpdateGroup} />
 						<Route path="/my_account" component={MyAccount} />
 						<Route path="/login" component={Login} />
 						<Route

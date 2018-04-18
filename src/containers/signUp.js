@@ -115,7 +115,6 @@ class SignUp extends Component {
 			this.state.fields.passwordConfirmation
 		) {
 			if (this.state.fields.new_account.account_id) {
-				console.log("creating user", this.state.fields);
 				this.props.createUser(
 					this.state.fields.new_account,
 					this.props.history
@@ -124,7 +123,6 @@ class SignUp extends Component {
 				this.state.fields.is_in_new_group &&
 				this.state.fields.new_account.account_type === "School"
 			) {
-				console.log("creating group then user", this.state.fields);
 				this.props.createGroupAndUser(
 					this.state.fields.new_account.account_type,
 					this.state.fields.new_school,
@@ -135,7 +133,6 @@ class SignUp extends Component {
 				this.state.fields.is_in_new_group &&
 				this.state.fields.new_account.account_type === "Company"
 			) {
-				console.log("creating group then user", this.state.fields);
 				this.props.createGroupAndUser(
 					this.state.fields.new_account.account_type,
 					this.state.fields.new_company,
