@@ -94,6 +94,40 @@ const getUsers = () => {
 	return getWithToken(`${API_ROOT}/users`);
 };
 
+const postUser = data => {
+	return fetch(`${API_ROOT}/users`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(data)
+	}).then(res => res.json());
+};
+
+const getGroup = (type, key) => {
+	let route = "";
+	if (type === "School") {
+		route = "schools_by_key";
+	} else {
+		route = "companies_by_key";
+	}
+
+	return fetch(`${API_ROOT}/${route}/${key}`).then(res => res.json());
+};
+
+const postGroup = (type, data) => {
+	let route = "";
+	if (type === "School") {
+		route = "schools";
+	} else {
+		route = "companies";
+	}
+
+	return fetch(`${API_ROOT}/${route}`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(data)
+	}).then(res => res.json());
+};
+
 export const adapter = {
 	auth: {
 		login,
@@ -115,6 +149,11 @@ export const adapter = {
 		getSchools
 	},
 	users: {
-		getUsers
+		getUsers,
+		postUser
+	},
+	groups: {
+		getGroup,
+		postGroup
 	}
 };

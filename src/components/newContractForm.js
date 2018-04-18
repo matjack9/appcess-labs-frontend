@@ -3,6 +3,7 @@ import withAuth from "../hocs/withAuth";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import * as actions from "../actions";
+import SchoolsContainer from "../containers/schoolsContainer";
 import {
 	Icon,
 	Button,
@@ -46,83 +47,88 @@ class NewContractForm extends Component {
 		const { fields } = this.state;
 
 		return (
-			<div className="new-contract-form">
-				<style>{`
+			<div>
+				<div className="new-contract-form" style={{ marginBottom: "2em" }}>
+					<style>{`
           body > div,
           body > div > div,
           body > div > div > div.new-contract-form {
             height: 100%;
           }
         `}</style>
-				<Grid
-					textAlign="center"
-					style={{ height: "100%" }}
-					verticalAlign="middle"
-				>
-					<Grid.Column style={{ maxWidth: 450 }}>
-						<Header as="h2" color="black" textAlign="center">
-							<Icon name="signup" />New Request
-						</Header>
-						<Form size="large" onSubmit={this.handleSubmit}>
-							<Segment>
-								<Form.Field required>
-									<label style={{ textAlign: "left" }}>Select a School</label>
-									<Form.Dropdown
-										onChange={this.handleSchoolChange}
-										placeholder="Select School"
-										fluid
-										search
-										selection
-										options={this.props.schoolOptions}
-										value={fields.school_id}
-									/>
-								</Form.Field>
-								{Object.keys(this.state.selectedSchool).length ? (
-									<Card color="blue" fluid>
-										<Card.Content>
-											<Card.Header>
-												{this.state.selectedSchool.attributes.name}
-											</Card.Header>
-											<Card.Meta>
-												<a
-													target="_blank"
-													href={
-														"http://" +
-														this.state.selectedSchool.attributes.website
-													}
-												>
-													{this.state.selectedSchool.attributes.website}{" "}
-													<Icon name="external" />
-												</a>
-											</Card.Meta>
-											<Card.Description>
-												<div>
-													<strong>Fee:</strong>{" "}
-													<span style={{ color: "red" }}>
-														${parseInt(
-															this.state.selectedSchool.attributes.fee
-														).toFixed(2)}
-													</span>
-												</div>
-												<div>
-													<strong>Deadline:</strong>{" "}
-													<span style={{ color: "red" }}>
-														{calculateDeadline(
-															this.state.selectedSchool.attributes.turntime
+					<Grid
+						textAlign="center"
+						style={{ height: "100%" }}
+						verticalAlign="middle"
+					>
+						<Grid.Column style={{ maxWidth: 450 }}>
+							<Header as="h2" color="black" textAlign="center">
+								<Icon name="signup" />New Request
+							</Header>
+							<Form size="large" onSubmit={this.handleSubmit}>
+								<Segment>
+									<Form.Field required>
+										<label style={{ textAlign: "left" }}>Select a School</label>
+										<Form.Dropdown
+											onChange={this.handleSchoolChange}
+											placeholder="Select School"
+											fluid
+											search
+											selection
+											options={this.props.schoolOptions}
+											value={fields.school_id}
+										/>
+									</Form.Field>
+									{Object.keys(this.state.selectedSchool).length ? (
+										<Card color="blue" fluid>
+											<Card.Content>
+												<Card.Header>
+													{this.state.selectedSchool.attributes.name}
+												</Card.Header>
+												<Card.Meta>
+													<a
+														target="_blank"
+														href={externalize_link(
+															this.state.selectedSchool.attributes.website
 														)}
-													</span>
-												</div>
-											</Card.Description>
-										</Card.Content>
-									</Card>
-								) : null}
-								<Button color="orange" fluid size="large">
-									Request
-								</Button>
-							</Segment>
-						</Form>
-					</Grid.Column>
-				</Grid>
+													>
+														{this.state.selectedSchool.attributes.website}{" "}
+														<Icon name="external" />
+													</a>
+												</Card.Meta>
+												<Card.Description>
+													<div>
+														<strong>Fee:</strong>{" "}
+														<span style={{ color: "red" }}>
+															${parseInt(
+																this.state.selectedSchool.attributes.fee
+															).toFixed(2)}
+														</span>
+													</div>
+													<div>
+														<strong>Deadline:</strong>{" "}
+														<span style={{ color: "red" }}>
+															{calculateDeadline(
+																this.state.selectedSchool.attributes.turntime
+															)}
+														</span>
+													</div>
+												</Card.Description>
+											</Card.Content>
+										</Card>
+									) : null}
+									<Button color="orange" fluid size="large">
+										Request
+									</Button>
+								</Segment>
+							</Form>
+						</Grid.Column>
+					</Grid>
+				</div>
+				<Header as="h2" color="black" textAlign="center">
+					Schools
+				</Header>
+				<SchoolsContainer />
 			</div>
 		);
 	}
@@ -144,6 +150,14 @@ function calculateDeadline(turntime) {
 
 	deadline = mm + "/" + dd + "/" + yyyy;
 	return deadline;
+}
+
+function externalize_link(url) {
+	if (url.startsWith("http")) {
+		return url;
+	} else {
+		return "http://" + url;
+	}
 }
 
 const mapStateToProps = (state, ownProps) => {

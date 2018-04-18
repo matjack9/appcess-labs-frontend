@@ -137,30 +137,34 @@ class UpdateContractForm extends Component {
 												value={selectedPhase}
 											/>
 										</Form.Field>
-										{(this.state.selectedPhase !== "Requested" ||
-											(this.state.currentPhase !== "Requested" &&
-												this.state.selectedPhase !== "Requested")) &&
-										this.props.currentUser.is_admin ? (
+										{this.props.currentUser.is_admin &&
+										this.state.selectedPhase !== "Requested" ? (
 											<Form.Field>
-												<label style={{ textAlign: "left" }}>
-													<strong>Assign to new student?</strong>
-												</label>
-												<Form.Dropdown
-													onChange={this.handleStudentChange}
-													placeholder="Select student"
-													fluid
-													search
-													selection
-													options={this.props.studentOptions}
-													value={assignedStudentId}
-												/>
+												{this.state.currentPhase !== "Requested" ||
+												this.state.selectedPhase ? (
+													<Form.Field>
+														<label style={{ textAlign: "left" }}>
+															<strong>Assign to new student?</strong>
+														</label>
+														<Form.Dropdown
+															onChange={this.handleStudentChange}
+															placeholder="Select student"
+															fluid
+															search
+															selection
+															options={this.props.studentOptions}
+															value={assignedStudentId}
+														/>
+													</Form.Field>
+												) : null}
 											</Form.Field>
 										) : null}
 										<Button color="blue" fluid size="large">
 											Update
 										</Button>
 									</Segment>
-									{this.props.currentUser.is_admin ? (
+									{this.props.currentUser.account_type === "Company" &&
+									this.props.currentUser.is_admin ? (
 										<Segment>
 											<Button
 												onClick={this.handleDelete}

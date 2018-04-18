@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import withAuth from "../hocs/withAuth";
 import SchoolCard from "../components/schoolCard";
-import SchoolsContainer from "./schoolsContainer";
 
 class SchoolShow extends Component {
 	state = {

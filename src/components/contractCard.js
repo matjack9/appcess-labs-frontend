@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Icon } from "semantic-ui-react";
 
 class ContractCard extends Component {
 	state = {
@@ -18,43 +18,45 @@ class ContractCard extends Component {
 		}
 
 		const attributes = this.props.contract.attributes;
-		switch (true) {
-			case attributes.status.is_completed:
-				this.setState({
-					statusInfo: {
-						...this.state.statusInfo,
-						status: "Complete",
-						color: "green"
-					}
-				});
-				break;
-			case attributes.status.is_in_review:
-				this.setState({
-					statusInfo: {
-						...this.state.statusInfo,
-						status: "In Review",
-						color: "teal"
-					}
-				});
-				break;
-			case attributes.status.is_in_progress:
-				this.setState({
-					statusInfo: {
-						...this.state.statusInfo,
-						status: "In Progress",
-						color: "yellow"
-					}
-				});
-				break;
-			case attributes.status.is_accepted:
-				this.setState({
-					statusInfo: {
-						...this.state.statusInfo,
-						status: "Request Accepted",
-						color: "grey"
-					}
-				});
-				break;
+		if (attributes) {
+			switch (true) {
+				case attributes.status.is_completed:
+					this.setState({
+						statusInfo: {
+							...this.state.statusInfo,
+							status: "Complete",
+							color: "green"
+						}
+					});
+					break;
+				case attributes.status.is_in_review:
+					this.setState({
+						statusInfo: {
+							...this.state.statusInfo,
+							status: "In Review",
+							color: "teal"
+						}
+					});
+					break;
+				case attributes.status.is_in_progress:
+					this.setState({
+						statusInfo: {
+							...this.state.statusInfo,
+							status: "In Progress",
+							color: "yellow"
+						}
+					});
+					break;
+				case attributes.status.is_accepted:
+					this.setState({
+						statusInfo: {
+							...this.state.statusInfo,
+							status: "Request Accepted",
+							color: "grey"
+						}
+					});
+					break;
+			}
 		}
 	}
 
@@ -72,7 +74,7 @@ class ContractCard extends Component {
 	render() {
 		const attributes = this.props.contract.attributes;
 
-		return (
+		return attributes ? (
 			<Card
 				color={this.state.statusInfo.color}
 				onClick={this.handleClick}
@@ -115,6 +117,13 @@ class ContractCard extends Component {
 					</Card.Description>
 				</Card.Content>
 				<Card.Content extra>
+					{attributes.github ? (
+						<div>
+							<a target="_blank" href={externalize_link(attributes.github)}>
+								{attributes.github} <Icon name="external" />
+							</a>
+						</div>
+					) : null}
 					<div>
 						Fee: ${parseInt(attributes.fee).toFixed(2)}
 						{this.props.currentUser.account_type === "School" &&
@@ -132,7 +141,15 @@ class ContractCard extends Component {
 					</div>
 				</Card.Content>
 			</Card>
-		);
+		) : null;
+	}
+}
+
+function externalize_link(url) {
+	if (url.startsWith("http")) {
+		return url;
+	} else {
+		return "http://" + url;
 	}
 }
 

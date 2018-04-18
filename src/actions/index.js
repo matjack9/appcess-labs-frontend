@@ -126,9 +126,61 @@ export const fetchUserContractAndProject = id => dispatch => {
 	adapter.contracts.getUserContract(id).then(payload => {
 		dispatch({ type: "SET_CONTRACTS", payload });
 		adapter.projects
-			.getUserProject(payload.data.relationships.project.data.id)
+			.getUserProject(parseInt(payload.data.relationships.project.data.id))
 			.then(payload => {
 				dispatch({ type: "SET_PROJECTS", payload });
 			});
+	});
+};
+
+export const fetchGroup = (type, key) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.groups.getGroup(type, key).then(payload => {
+		if (payload.error) {
+			alert(payload.error);
+		} else if (type === "School") {
+			dispatch({ type: "SET_SCHOOLS", payload });
+		} else {
+			dispatch({ type: "SET_COMPANIES", payload });
+		}
+	});
+};
+
+export const createUser = (data, history) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.users.postUser(data).then(payload => {
+		localStorage.setItem("token", payload.jwt);
+		const user = payload;
+		dispatch({ type: "SET_CURRENT_USER", user });
+		if (localStorage.getItem("token") !== "undefined") {
+			history.push("/");
+		} else {
+			alert(payload.errors);
+		}
+	});
+};
+
+export const createGroupAndUser = (
+	type,
+	group_data,
+	user_data,
+	history
+) => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.groups.postGroup(type, group_data).then(payload => {
+		if (payload.errors) {
+			alert(payload.errors);
+		} else {
+			user_data["account_id"] = payload.data.id;
+			adapter.users.postUser(user_data).then(user => {
+				localStorage.setItem("token", user.jwt);
+				dispatch({ type: "SET_CURRENT_USER", user });
+				if (localStorage.getItem("token") !== "undefined") {
+					history.push("/");
+				} else {
+					alert(user.error);
+				}
+			});
+		}
 	});
 };
