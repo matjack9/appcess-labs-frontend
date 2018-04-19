@@ -27,25 +27,29 @@ class ProjectShow extends Component {
 	}
 
 	render() {
-		return !Object.keys(this.props.project).length ? (
-			<p>Nothing found</p>
-		) : (
+		return (
 			<div>
-				<ProjectCard
-					key={this.props.project.id}
-					project={this.props.project}
-					isFluid={true}
-				/>
-				{this.props.currentUser.account_type === "Company" &&
-				this.props.currentUser.is_admin === true ? (
-					<Card.Group centered>
-						<NewContractCard />
-					</Card.Group>
-				) : null}
-				{this.props.currentUser.account_type === "Company" &&
-				this.props.project.id ? (
-					<ContractsContainer projectId={this.props.project.id} />
-				) : null}
+				{this.props.project && !Object.keys(this.props.project).length ? (
+					<p>Nothing found</p>
+				) : (
+					<div>
+						<ProjectCard
+							key={this.props.project.id}
+							project={this.props.project}
+							isFluid={true}
+						/>
+						{this.props.currentUser.account_type === "Company" &&
+						this.props.currentUser.is_admin === true ? (
+							<Card.Group centered>
+								<NewContractCard />
+							</Card.Group>
+						) : null}
+						{this.props.currentUser.account_type === "Company" &&
+						this.props.project.id ? (
+							<ContractsContainer projectId={this.props.project.id} />
+						) : null}
+					</div>
+				)}
 			</div>
 		);
 	}
@@ -56,9 +60,12 @@ const mapStateToProps = (state, ownProps) => {
 	let project = {};
 	if (state.userProjects.projects.length) {
 		project = state.userProjects.projects.find(p => p.id == id);
+		if (!project) {
+			project = {};
+		}
 	}
 	const currentUser = state.auth.currentUser;
-
+	console.log(project);
 	return { id, project, currentUser };
 };
 

@@ -51,7 +51,11 @@ const mapStateToProps = (state, ownProps) => {
 		contract = state.userContracts.contracts.find(c => c.id == id);
 	}
 	let project = {};
-	if (state.userProjects.projects.length && Object.keys(contract).length) {
+	if (
+		state.userProjects.projects &&
+		state.userProjects.projects.length &&
+		Object.keys(contract).length
+	) {
 		project = state.userProjects.projects.find(
 			p => p.id == contract.relationships.project.data.id
 		);

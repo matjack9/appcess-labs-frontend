@@ -3,18 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import * as actions from "../actions";
 import withAuth from "../hocs/withAuth";
-import {
-	Button,
-	Form,
-	Radio,
-	Checkbox,
-	Grid,
-	Header,
-	Message,
-	Input,
-	Segment,
-	Icon
-} from "semantic-ui-react";
+import { Button, Form, Grid, Header, Segment, Icon } from "semantic-ui-react";
 
 class MyAccount extends Component {
 	state = {
@@ -45,13 +34,22 @@ class MyAccount extends Component {
 		});
 	}
 
-	// static getDerivedStateFromProps(nextProps, prevState) {
-	//
-	// 	return {}
-	// }
+	static getDerivedStateFromProps(nextProps, prevState) {
+		if (nextProps.currentUser) {
+			const { email, first_name, last_name } = nextProps.currentUser;
+			return {
+				// justUpdated: true, // does not work this way
+				userParams: {
+					...prevState.userParams,
+					email,
+					first_name,
+					last_name
+				}
+			};
+		}
+	}
 
 	handleChange = (e, { name, value }) => {
-		console.dir(e.target);
 		if (name === "passwordConfirmation") {
 			this.setState({ passwordConfirmation: value });
 		} else {
@@ -61,21 +59,20 @@ class MyAccount extends Component {
 	};
 
 	handleClick = () => {
-		this.props.history.push("/my_account/group");
+		alert("not yet working :(");
+		// this.props.history.push("/my_account/group");
 	};
 
 	handleSubmit = e => {
 		e.preventDefault();
 		if (this.state.passwordConfirmation === this.state.userParams.password) {
-			console.log("Submitting:", this.state);
-			this.setState({ justUpdated: true }); // submission will re-set current_user (so field values automatically update) (also move this to receiving newpropsmethod)
+			this.props.updateUser(this.state.userParams);
 		} else {
 			alert("New passwords need to match");
 		}
 	};
 
 	render() {
-		console.log(this.state);
 		return (
 			<div className="my-account-form">
 				<style>{`
@@ -154,7 +151,7 @@ class MyAccount extends Component {
 									{this.state.accountType === "School" && this.state.isAdmin ? (
 										<Form.Field>
 											<Button
-												color="black"
+												color="blue"
 												size="tiny"
 												onClick={this.handleClick}
 											>

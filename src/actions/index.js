@@ -99,11 +99,12 @@ export const createProject = (
 
 export const createContract = (project_id, school_id, history) => dispatch => {
 	dispatch({ type: "ASYNC_START" });
-	adapter.contracts.postContract({ project_id, school_id }).then(contract => {
-		if (contract.data) {
-			history.push(`/contracts/${contract.data.id}`);
+	adapter.contracts.postContract({ project_id, school_id }).then(payload => {
+		if (payload.data) {
+			dispatch({ type: "SET_CONTRACTS", payload });
+			history.push(`/contracts/${payload.data.id}`);
 		} else {
-			let errorMessage = contract.errors;
+			let errorMessage = payload.errors;
 			alert(errorMessage);
 		}
 	});
@@ -210,4 +211,17 @@ export const deleteContract = (
 				history.push(`/projects/${project_id}`);
 			}
 		});
+};
+
+export const updateUser = updateParams => dispatch => {
+	dispatch({ type: "ASYNC_START" });
+	adapter.users.patchUser(updateParams).then(payload => {
+		if (payload.id) {
+			const user = payload;
+			dispatch({ type: "SET_CURRENT_USER", user });
+			alert("User updated!");
+		} else {
+			alert(payload.errors);
+		}
+	});
 };

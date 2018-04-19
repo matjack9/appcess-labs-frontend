@@ -25,9 +25,12 @@ class ContractsContainer extends Component {
 	}
 
 	render() {
-		const userContractsCards = this.props.userContracts.map(c => (
-			<ContractCard key={c.id} contract={c} />
-		));
+		let userContractsCards = null;
+		if (this.props.userContracts.length) {
+			userContractsCards = this.props.userContracts.map(c => (
+				<ContractCard key={c.id} contract={c} />
+			));
+		}
 		return (
 			<div>
 				{!this.state.fetchContractsCompleted ? (
@@ -44,10 +47,10 @@ const mapStateToProps = (state, ownProps) => {
 	let userContracts = state.userContracts.contracts;
 	if (ownProps.projectId) {
 		let id = ownProps.projectId;
-		if (userContracts.relationships) {
-			userContracts = userContracts.filter(
-				c => c.relationships.project.data.id === id
-			);
+		if (userContracts.length) {
+			userContracts = userContracts.filter(c => {
+				return c.relationships.project.data.id == id;
+			});
 		}
 	}
 

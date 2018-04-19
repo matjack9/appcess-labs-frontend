@@ -11,7 +11,7 @@ class UpdateContractForm extends Component {
 		selectedPhase: null,
 		currentPhase: "Requested",
 		color: "orange",
-		assignedStudentId: this.props.assignedStudentId, //fix
+		assignedStudentId: 0, //this.props.assignedStudentId, //fix
 		github: ""
 	};
 
@@ -258,8 +258,16 @@ const mapStateToProps = (state, ownProps) => {
 	let assignedStudentId = null;
 	if (state.userContracts.contracts.length) {
 		contract = state.userContracts.contracts.find(c => c.id == id);
-		if (contract.relationships.user.data.id) {
-			assignedStudentId = contract.relationships.user.data.id;
+		if (contract) {
+			console.log(contract);
+			if (
+				contract.relationships.user.data &&
+				contract.relationships.user.data.id
+			) {
+				assignedStudentId = contract.relationships.user.data.id;
+			}
+		} else {
+			contract = {};
 		}
 	}
 	const currentUser = state.auth.currentUser;

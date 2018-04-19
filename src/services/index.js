@@ -105,6 +105,10 @@ const postUser = data => {
 	}).then(res => res.json());
 };
 
+const patchUser = data => {
+	return patchWithToken(`${API_ROOT}/update_user`, data);
+};
+
 const getGroup = (type, key) => {
 	let route = "";
 	if (type === "School") {
@@ -154,7 +158,8 @@ export const adapter = {
 	},
 	users: {
 		getUsers,
-		postUser
+		postUser,
+		patchUser
 	},
 	groups: {
 		getGroup,
