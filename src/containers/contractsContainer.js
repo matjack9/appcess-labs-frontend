@@ -47,8 +47,8 @@ const mapStateToProps = (state, ownProps) => {
 	let userContracts = state.userContracts.contracts;
 	if (ownProps.projectId) {
 		let id = ownProps.projectId;
-		if (userContracts.length) {
-			userContracts = userContracts.filter(c => {
+		if (userContracts[0]) {
+			userContracts = userContracts[0].filter(c => {
 				return c.relationships.project.data.id == id;
 			});
 		}

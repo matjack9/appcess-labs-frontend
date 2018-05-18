@@ -11,7 +11,7 @@ class UpdateContractForm extends Component {
 		selectedPhase: null,
 		currentPhase: "Requested",
 		color: "orange",
-		assignedStudentId: 0, //this.props.assignedStudentId, //fix
+		assignedStudentId: 0,
 		github: ""
 	};
 
